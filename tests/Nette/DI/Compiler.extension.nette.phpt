@@ -50,7 +50,7 @@ $config['parameters']['debugMode'] = FALSE;
 $config['parameters']['tempDir'] = '';
 
 $compiler = new DI\Compiler;
-$compiler->addExtension('nette', new Nette\DI\Extensions\NetteExtension);
+$compiler->addExtension('nette', new Nette\Bridges\DI\NetteExtension);
 $code = $compiler->compile($config, 'Container', 'Nette\DI\Container');
 
 
