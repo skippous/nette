@@ -60,8 +60,14 @@ class PresenterFactory implements IPresenterFactory
 	 */
 	public function createPresenter($name)
 	{
-		$presenter = $this->container->createInstance($this->getPresenterClass($name));
-		$this->container->callInjects($presenter);
+		$class = $this->getPresenterClass($name);
+		$lower = ltrim(strtolower($class), '\\');
+		if (empty($this->container->classes[$lower])) {
+			$presenter = $this->container->createInstance($class);
+			$this->container->callInjects($presenter);
+		} else {
+			$presenter = $this->container->createService($this->container->classes[$lower]);
+		}
 
 		if ($presenter instanceof UI\Presenter && $presenter->invalidLinkMode === NULL) {
 			$presenter->invalidLinkMode = $this->container->parameters['debugMode'] ? UI\Presenter::INVALID_LINK_WARNING : UI\Presenter::INVALID_LINK_SILENT;
